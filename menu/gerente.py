@@ -1,3 +1,5 @@
+from functions.invcheckingfactory import InventoryChecker
+from functions.rescheckingfactory import ReservationChecker
 
 
 def gerente_menu():
@@ -8,11 +10,12 @@ def gerente_menu():
 
 def handle_gerente_choice(choice, id_sede, connection):
     cursor = connection.cursor()
+    inv_checker = InventoryChecker()  
+    res_checker = ReservationChecker()  
     if choice == '1':
-        c.checkinv(cursor, id_sede)
+        inv_checker.checkinv(cursor, id_sede)  
     elif choice == '2':
-        print(f"Revisando reservaciones para la sede {id_sede}...")
-        cursor.execute
+        res_checker.checkres(cursor, id_sede)  
     elif choice == '3':
         print("Saliendo...")
         return False

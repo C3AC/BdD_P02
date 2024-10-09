@@ -1,15 +1,19 @@
+from functions.invcheckingfactory import InventoryChecker
+
+
 def cocina_menu():
     print("Cocina Menu:")
-    print("1. Check Inventory")
-    print("2. Exit")
+    print("1. Revisar Inventario")
+    print("2. Salir")
 
-def handle_cocina_choice(choice, id_sede):
+def handle_cocina_choice(choice, id_sede, connection):
+    cursor = connection.cursor()
+    inv_checker = InventoryChecker()  # Crear una instancia de InventoryChecker
     if choice == '1':
-        print(f"Checking inventory for sede {id_sede}...")
-        # Add inventory checking logic here using id_sede
+        inv_checker.checkinv(cursor, id_sede)  # Usar la instancia para llamar a checkinv
     elif choice == '2':
-        print("Exiting...")
+        print("Saliendo...")
         return False
     else:
-        print("Invalid choice, please try again.")
+        print("Elección inválida, por favor intente de nuevo.")
     return True
