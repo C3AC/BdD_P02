@@ -1,2 +1,3 @@
-config.json
-*.pyc
+functions/__pycache__/
+menu/__pycache__/
+configuration/config.json
