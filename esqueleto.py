@@ -4,7 +4,7 @@ import menu.admin as a
 import menu.gerente as g
 import menu.cocina as c
 import menu.mesero as m
-
+    
 def connect_to_db():
     try:
         # Leer las credenciales desde el archivo config.json

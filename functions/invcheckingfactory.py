@@ -9,7 +9,14 @@ class InventoryChecker:
 
     def checkinv_with_sede(self, cursor, id_sede):
         print(f"Revisando inventario para la sede {id_sede}...")
-        cursor.execute("SELECT inv.id_producto, nombre_producto, cantidad FROM inventario inv JOIN ingredientes ing ON inv.id_producto = ing.id_producto WHERE id_sede = %s;", (id_sede,))
+        query = """
+            SELECT inv.id_producto, nombre_producto, SUM(cantidad)
+            FROM inventario inv
+            JOIN ingredientes ing ON inv.id_producto = ing.id_producto
+            WHERE id_sede = %s
+            GROUP BY inv.id_producto, nombre_producto;
+        """
+        cursor.execute(query, (id_sede,))
         results = cursor.fetchall()
         headers = ["ID Producto", "Nombre Producto", "Cantidad"]
         print(tabulate(results, headers, tablefmt="fancy_outline"))
@@ -17,7 +24,14 @@ class InventoryChecker:
 
     def checkinv_without_sede(self, cursor):
         print("Revisando inventario...")
-        cursor.execute("SELECT inv.id_producto, nombre_producto, cantidad FROM inventario inv JOIN ingredientes ing ON inv.id_producto = ing.id_producto;")
+        query = """
+            SELECT inv.id_sede,inv.id_producto, nombre_producto, SUM(cantidad)
+            FROM inventario inv
+            JOIN ingredientes ing ON inv.id_producto = ing.id_producto
+            GROUP BY inv.id_producto, nombre_producto, inv.id_sede
+            ORDER BY inv.id_sede;
+        """
+        cursor.execute(query)
         results = cursor.fetchall()
         headers = ["ID Producto", "Nombre Producto", "Cantidad"]
         print(tabulate(results, headers, tablefmt="fancy_outline"))

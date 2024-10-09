@@ -18,10 +18,10 @@ def handle_admin_choice(choice, connection):
         # Add user registration logic here
     elif choice == '2':
         print("Checking inventory...")
-        inv_checker.checkinv_without_sede(cursor)  
+        inv_checker.checkinv(cursor)  
     elif choice == '3':
         print("Checking reservations...")
-        res_checker.checkres_without_sede(cursor) 
+        res_checker.checkres(cursor) 
     elif choice == '4':
         print("Exiting...")
         return False
