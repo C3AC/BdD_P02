@@ -1,19 +1,21 @@
-def gerente_menu():
-    print("Gerente Menu:")
-    print("1. Check Inventory")
-    print("2. Check Reservations")
-    print("3. Exit")
 
-def handle_gerente_choice(choice, id_sede):
+
+def gerente_menu():
+    print("Menu:")
+    print("1. Revisar Inventario")
+    print("2. Revisar Reservaciones")
+    print("3. Salir")
+
+def handle_gerente_choice(choice, id_sede, connection):
+    cursor = connection.cursor()
     if choice == '1':
-        print(f"Checking inventory for sede {id_sede}...")
-        # Add inventory checking logic here using id_sede
+        c.checkinv(cursor, id_sede)
     elif choice == '2':
-        print(f"Checking reservations for sede {id_sede}...")
-        # Add reservations checking logic here using id_sede
+        print(f"Revisando reservaciones para la sede {id_sede}...")
+        cursor.execute
     elif choice == '3':
-        print("Exiting...")
+        print("Saliendo...")
         return False
     else:
-        print("Invalid choice, please try again.")
+        print("Elección inválida, por favor intente de nuevo.")
     return True
