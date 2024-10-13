@@ -1,4 +1,5 @@
 from tabulate import tabulate
+from addblame import blaming
 
 def additem(cursor, id_sede): 
     cursor.execute("SELECT id_producto, nombre_producto FROM ingredientes;")
@@ -12,6 +13,7 @@ def additem(cursor, id_sede):
         cursor.execute('''INSERT INTO inventario(id_sede, id_producto, cantidad, fecha_caducidad) 
                    VALUES (%s, %s, %s, %s);''', (id_sede, id_producto, cantidad, fecha_caducidad))
         print("Producto agregado al inventario.")
+        blaming(cursor)
     except Exception as e:
         print("Error al agregar el producto al inventario", e)
     finally:

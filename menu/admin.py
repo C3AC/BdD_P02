@@ -2,14 +2,15 @@ from functions.invcheckingfactory import InventoryChecker
 from functions.rescheckingfactory import ReservationChecker
 from functions.invupdate import additem
 from functions.resupdate import addreservation
+from required_queries import report_menu
 
 def admin_menu():
     print("Admin Menu:")
-    print("1. Register User")
-    print("2. Check Inventory")
-    print("3. Check Reservations")
-    print("4. Add to Inventory")
-    print("5. Add Reservation")
+    print("1. Reportes")
+    print("2. Revisar Inventario")
+    print("3. Revisar Reservaciones")
+    print("4. Agregar a inventario")
+    print("5. Agregar a reservaciones")
     print("6. Exit")
 
 def handle_admin_choice(choice, connection):
@@ -17,8 +18,8 @@ def handle_admin_choice(choice, connection):
     inv_checker = InventoryChecker()  
     res_checker = ReservationChecker()  
     if choice == '1':
-        print("Registering user...")
-        # Add user registration logic here
+        print("Reportes")
+        report_menu.report_menus(connection)
     elif choice == '2':
         print("Checking inventory...")
         inv_checker.checkinv(cursor)  

@@ -1,24 +1,23 @@
 from tabulate import tabulate
 from datetime import datetime
 import hashlib
+import genclient as gc
+from addblame import blaming
 
 def get_available_tables(cursor, fecha_reserva, hora_reserva):
     query = """
         SELECT m.id_mesa
-        FROM mesa m
-        LEFT JOIN reserva r ON m.id_mesa = r.id_mesa
-        WHERE NOT (r.fecha_reserva = %s AND (r.hora_reserva - %s::time) > INTERVAL '3 hours')
+        FROM mesa m JOIN reserva r ON m.id_mesa = r.id_mesa
+        WHERE NOT (r.fecha_reserva = %s AND (r.hora_reserva - %s::time) > INTERVAL '3 hours') 
+        AND r.id_reserva != null
     """
     cursor.execute(query, (fecha_reserva, hora_reserva))
     return cursor.fetchall()
 
 def generate_unique_code(id_cliente, id_mesa, fecha, hora):
-    # Combinar los elementos en una cadena
     unique_string = f"{id_cliente}{id_mesa}{fecha}{hora}"
-    # Generar un hash de la cadena
     hash_object = hashlib.md5(unique_string.encode())
-    # Convertir el hash a un número entero
-    unique_code = int(hash_object.hexdigest(), 16) % (10**9)  # Limitar a 9 dígitos para que quepa en un int
+    unique_code = int(hash_object.hexdigest(), 16) % (10**9) 
     return unique_code
 
 def addreservation(cursor, id_sede):
@@ -26,7 +25,24 @@ def addreservation(cursor, id_sede):
     results = cursor.fetchall()
     headers = ["ID Cliente", "Nombre"]
     print(tabulate(results, headers, tablefmt="fancy_outline"))
-    id_cliente = input("Ingrese el ID del cliente que desea hacer la reservación: ")
+    try:
+        flag = True
+        while flag:
+            id_cliente = int(input("Ingrese el ID del cliente que desea hacer la reservación (ingrese 0 para crear un usuario): "))
+            query = "SELECT id_cliente FROM cliente WHERE id_cliente = %s"
+            cursor.execute(query, (id_cliente,))
+            if id_cliente == 0:
+                id_cliente = gc.generar_cliente(cursor)
+                if id_cliente is None:
+                    print ("Cliente agregado no pudo ser accesado, reintente la operación de reserva")
+                    return 
+            elif cursor.fetchone() is None and id_cliente != 0:
+                print("El ID de cliente ingresado no existe.")
+            else:
+                flag = False
+    except ValueError:
+        print("ID de cliente inválido.")
+        return    
     while True:
         try: 
             fecha = input("Ingrese la fecha de la reservación (YYYY-MM-DD): ")
@@ -51,7 +67,7 @@ def addreservation(cursor, id_sede):
 
     id_mesa = input("Ingrese el ID de la mesa que desea reservar: ")
 
-    # Generar un código único para la reserva
+   
     id_reserva = generate_unique_code(id_cliente, id_mesa, fecha, hora)
     print(f"ID de la reserva: {id_reserva}")
 
@@ -61,3 +77,4 @@ def addreservation(cursor, id_sede):
     """
     cursor.execute(query, (id_reserva, id_sede, id_cliente, id_mesa, fecha, hora))
     print("Reservación agregada exitosamente.")
+    blaming(cursor)
