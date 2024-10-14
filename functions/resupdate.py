@@ -78,3 +78,4 @@ def addreservation(cursor, id_sede):
     cursor.execute(query, (id_reserva, id_sede, id_cliente, id_mesa, fecha, hora))
     print("Reservación agregada exitosamente.")
     blaming(cursor)
+    return id_reserva
