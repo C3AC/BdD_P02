@@ -8,7 +8,7 @@ def get_available_tables(cursor, fecha_reserva, hora_reserva):
     query = """
         SELECT m.id_mesa
         FROM mesa m JOIN reserva r ON m.id_mesa = r.id_mesa
-        WHERE NOT (r.fecha_reserva = %s AND (r.hora_reserva - %s::time) > INTERVAL '3 hours') 
+        WHERE (r.fecha_reserva = %s AND (r.hora_reserva - %s::time) > INTERVAL '3 hours') 
         AND r.id_reserva != null
     """
     cursor.execute(query, (fecha_reserva, hora_reserva))
