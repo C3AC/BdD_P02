@@ -9,7 +9,7 @@ class ReservationChecker:
 
     def checkres_with_sede(self, cursor, id_sede):
         print(f"Revisando reservas para la sede {id_sede}...")
-        cursor.execute("SELECT id_reserva, nombre_cliente, celular, c.hora_reserva FROM reserva r JOIN cliente c on r.id_cliente = c.id_cliente WHERE id_sede =%s;", (id_sede,))
+        cursor.execute("SELECT id_reserva, nombre_cliente, id_mesa, r.hora_reserva FROM reserva r JOIN cliente c on r.id_cliente = c.id_cliente WHERE id_sede =%s;", (id_sede,))
         results = cursor.fetchall()
         headers = ["ID Reserva", "ID Cliente", "ID Mesa", "Fecha Reserva", "Hora Reserva", "Cantidad Personas"]
         print(tabulate(results, headers, tablefmt="fancy_outline"))
@@ -17,7 +17,7 @@ class ReservationChecker:
 
     def checkres_without_sede(self, cursor):
         print("Revisando reservas...")
-        cursor.execute("SELECT id_reserva, nombre_cliente, celular, c.hora_reserva FROM reserva r JOIN cliente c on r.id_cliente = c.id_cliente;")
+        cursor.execute("SELECT id_reserva, nombre_cliente, id_mesa, r.hora_reserva FROM reserva r JOIN cliente c on r.id_cliente = c.id_cliente;")
         results = cursor.fetchall()
         headers = ["ID Reserva", "ID Cliente", "ID Mesa", "Fecha Reserva", "Hora Reserva", "Cantidad Personas"]
         print(tabulate(results, headers, tablefmt="fancy_outline"))
