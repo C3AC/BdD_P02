@@ -4,6 +4,7 @@ from menu import admin as a
 from menu import gerente as g
 from menu import cocina as c
 from menu import mesero as m
+import globvar
 
 def connect_to_db():
     try:
@@ -28,8 +29,7 @@ def get_user_role_and_password(nombre, password, connection):
         result = cursor.fetchone()
         if result:
             if result[2] == password:
-                global id_usuario
-                id_usuario = result[3]
+                globvar.id_usuario = result[3]
                 return result[0], result[1]  # Devolver id_rol y id_sede
             else:
                 return None, None, None  # Contraseña incorrecta

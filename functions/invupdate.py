@@ -1,5 +1,5 @@
 from tabulate import tabulate
-from addblame import blaming
+from functions.addblame import blaming
 
 def additem(cursor, id_sede): 
     cursor.execute("SELECT id_producto, nombre_producto FROM ingredientes;")

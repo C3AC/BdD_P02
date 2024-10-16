@@ -1,5 +1,5 @@
 from tabulate import tabulate
-from functions.resupdate import resupdate
+from functions.resupdate import addreservation
 
 def order(cursor, id_sede):
     print('Seleccione una sede: ')
@@ -15,7 +15,7 @@ def order(cursor, id_sede):
     print(tabulate(reservations, headers=['ID Reserva', 'ID Mesa']))
     if reservations == []:
         print('No hay reservaciones para hoy, ingrese una reservacion antes de empezar un pedido')
-        id_reserva = resupdate(cursor, id_sede)
+        id_reserva = addreservation(cursor, id_sede)
     else:
         print('Seleccione una reservación: ')
         flag = True

@@ -1,4 +1,4 @@
-from addblame import blaming
+from functions.addblame import blaming
 def generar_cliente(cursor):
     print("Creando nuevo cliente...")
     nombre = input("Ingrese el nombre del cliente: ")

@@ -1,8 +1,8 @@
 from tabulate import tabulate
 from datetime import datetime
 import hashlib
-import genclient as gc
-from addblame import blaming
+from functions.genclient import generar_cliente as gc
+from functions.addblame import blaming
 
 def get_available_tables(cursor, fecha_reserva, hora_reserva):
     query = """
