@@ -15,10 +15,22 @@ def addproduct(cursor, id_pedido):
             if cursor.fetchone() is None:
                 print("ID de plato inválido")
             else:
-                query = "INSERT INTO detalle_pedido (id_detalle,id_pedido, id_plato) VALUES (%s, %s)"
-                cursor.execute(query, (id_pedido, select))
+                flag = True   
+                while flag:
+                    try:
+                        cantidad = int(input('Ingrese la cantidad de platos a agregar: '))
+                        if cantidad <= 0:
+                            print("Cantidad inválida")
+                        else:
+                            flag = False
+                    except ValueError:
+                        print("Entrada inválida")
+                        return
+                
+                query = "INSERT INTO detalle_pedido (id_pedido, id_plato, cantidad) VALUES (%s, %s,%s)"
+                cursor.execute(query, (id_pedido, select,cantidad,))
                 print("Producto agregado exitosamente")
-                selection = input("¿Desea agregar otro producto? (s/n)")
+                selection = input("¿Desea agregar otro producto? (s/n): ")
                 if selection.lower() == 'n':
                     flag = False
                 elif selection.lower() == 's':

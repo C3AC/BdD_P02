@@ -35,7 +35,7 @@ def handle_mesero_choice(choice, id_sede, connection):
         while flag:
             try:
                 id_pedido = int(input("Ingrese el ID del pedido al que desea agregar productos: "))
-                query = "SELECT id_pedido FROM pedido WHERE id_pedido = %s"
+                query = "SELECT id_reserva FROM reserva WHERE id_reserva = %s"
                 cursor.execute(query, (id_pedido,))
                 if cursor.fetchone() is None:
                     print("ID de pedido inválido")
