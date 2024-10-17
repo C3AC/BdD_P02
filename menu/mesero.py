@@ -27,7 +27,7 @@ def handle_mesero_choice(choice, id_sede, connection):
         upd.addproduct(cursor, pedido)
         connection.commit()
     elif choice == '4':
-        query = "SELECT id_pedido FROM pedido WHERE id_sede = %s AND fecha = CURDATE()"
+        query = "SELECT id_reserva FROM reserva WHERE fecha_reserva = CURRENT_DATE"
         cursor.execute(query, (id_sede,))
         table = cursor.fetchall()
         print(tabulate(table, headers=['ID Pedido']))

@@ -16,5 +16,5 @@ def generar_cliente(cursor):
     cursor.execute(query, (nombre, correo, celular))
     print("Cliente creado exitosamente.")
     blaming(cursor)
-    cursor.execute("SELECT id_cliente FROM cliente WHERE nombre_cliente = %s", (nombre,))
-    return cursor.fetchone()[0]
+    cursor.execute('SELECT MAX(id_cliente) FROM cliente')
+    return cursor.fetchone()

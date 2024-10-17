@@ -4,10 +4,10 @@ from functions.resupdate import addreservation
 def order(cursor, id_sede):
     print('Seleccione una sede: ')
     query = '''
-        SELECT id_reserva,id_mesa
+        SELECT id_reserva, r.id_mesa
         FROM reserva r JOIN mesa m on r.id_mesa = m.id_mesa
         WHERE r.id_sede = %s
-        AND r.fecha = CURDATE()
+        AND r.fecha_reserva = CURRENT_DATE
     '''
     cursor.execute(query, (id_sede,))
     reservations = cursor.fetchall()
@@ -38,10 +38,10 @@ def order(cursor, id_sede):
                 print('Entrada inválida')
                 return
     query = '''
-            INSERT INTO pedido (id_reserva, id_sede, total)
+            INSERT INTO pedido (id_reserva, id_pedido, total)
             VALUES (%s, %s, 0)
         '''
-    cursor.execute(query, (id_reserva, id_sede))
+    cursor.execute(query, (id_reserva, id_reserva))
     print('Pedido creado exitosamente')
     input('Presione enter para empezar a agregar productos al pedido')
     return id_reserva
