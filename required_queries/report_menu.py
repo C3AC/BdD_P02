@@ -34,7 +34,8 @@ def handle_report_choice(choice, connection):
         """
         cursor.execute(query)
         results = cursor.fetchall()
-        print(results)
+        headers = ["Cliente", "Cantidad de reservas"]
+        print(tabulate(results, headers, tablefmt="fancy_grid"))
     elif choice == '3':
         query = """
             SELECT c.nombre_cliente, COUNT(r.id_reserva) AS total_reservas, 

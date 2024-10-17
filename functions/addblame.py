@@ -18,5 +18,3 @@ def blaming(cursor):
     except Exception as e:
         print(f"Error: {e}")
         cursor.connection.rollback()
-    finally:
-        cursor.close()

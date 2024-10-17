@@ -1,17 +1,19 @@
 from tabulate import tabulate
 from datetime import datetime
 import hashlib
-from functions.genclient import generar_cliente as gc
+from functions.genclient import generar_cliente
 from functions.addblame import blaming
 
-def get_available_tables(cursor, fecha_reserva, hora_reserva):
+def get_available_tables(cursor, fecha_reserva, hora_reserva, id_sede):
     query = """
-        SELECT m.id_mesa
-        FROM mesa m JOIN reserva r ON m.id_mesa = r.id_mesa
-        WHERE (r.fecha_reserva = %s AND (r.hora_reserva - %s::time) > INTERVAL '3 hours') 
-        AND r.id_reserva != null
+            SELECT *
+            FROM mesa
+            WHERE id_sede=%s AND id_mesa not in (SELECT id_mesa
+                                                FROM reserva 
+                                                WHERE fecha_reserva = %s 
+                                                AND (hora_reserva - %s) < '3 hours' )
     """
-    cursor.execute(query, (fecha_reserva, hora_reserva))
+    cursor.execute(query, (id_sede,fecha_reserva, hora_reserva,))
     return cursor.fetchall()
 
 def generate_unique_code(id_cliente, id_mesa, fecha, hora):
@@ -32,7 +34,7 @@ def addreservation(cursor, id_sede):
             query = "SELECT id_cliente FROM cliente WHERE id_cliente = %s"
             cursor.execute(query, (id_cliente,))
             if id_cliente == 0:
-                id_cliente = gc.generar_cliente(cursor)
+                id_cliente = generar_cliente(cursor)
                 if id_cliente is None:
                     print ("Cliente agregado no pudo ser accesado, reintente la operación de reserva")
                     return 
@@ -56,7 +58,7 @@ def addreservation(cursor, id_sede):
             print("Formato de fecha u hora incorrecto. Por favor, ingrese la fecha en formato YYYY-MM-DD y la hora en formato HH:MM.")
 
 
-    available_tables = get_available_tables(cursor, fecha, hora)
+    available_tables = get_available_tables(cursor, fecha, hora, id_sede)
     if not available_tables:
         print("No hay mesas disponibles para la fecha y hora seleccionadas.")
         return

@@ -23,7 +23,6 @@ class InventoryChecker:
         input("Presione enter para continuar...")
 
     def checkinv_without_sede(self, cursor):
-        print("Revisando inventario...")
         query = """
             SELECT inv.id_sede,inv.id_producto, nombre_producto, SUM(cantidad)
             FROM inventario inv
@@ -33,6 +32,6 @@ class InventoryChecker:
         """
         cursor.execute(query)
         results = cursor.fetchall()
-        headers = ["ID Producto", "Nombre Producto", "Cantidad"]
+        headers = ['ID Sede',"ID Producto", "Nombre Producto", "Cantidad"]
         print(tabulate(results, headers, tablefmt="fancy_outline"))
         input("Presione enter para continuar...")
