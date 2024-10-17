@@ -1,6 +1,6 @@
 from tabulate import tabulate
 
-def addproduct(cursor, id_pedido):
+def addproduct(cursor, id_pedido, connection):
     query = "SELECT id_plato, nombre_plato, precio_plato FROM plato"
     cursor.execute(query)
     results = cursor.fetchall()
@@ -30,6 +30,9 @@ def addproduct(cursor, id_pedido):
                 query = "INSERT INTO detalle_pedido (id_pedido, id_plato, cantidad) VALUES (%s, %s,%s)"
                 cursor.execute(query, (id_pedido, select,cantidad,))
                 print("Producto agregado exitosamente")
+                if connection.notices:
+                    for notice in connection.notices:
+                        print("NOTICE:", notice)
                 selection = input("¿Desea agregar otro producto? (s/n): ")
                 if selection.lower() == 'n':
                     flag = False
