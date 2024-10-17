@@ -8,6 +8,7 @@ def order(cursor, id_sede):
         FROM reserva r JOIN mesa m on r.id_mesa = m.id_mesa
         WHERE r.id_sede = %s
         AND r.fecha_reserva = CURRENT_DATE
+        AND r.id_reserva NOT IN (SELECT id_reserva FROM pedido)
     '''
     cursor.execute(query, (id_sede,))
     reservations = cursor.fetchall()

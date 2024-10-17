@@ -24,10 +24,10 @@ def handle_mesero_choice(choice, id_sede, connection):
         print("Menú y Pedido")
         pedido = order(cursor, id_sede)
         connection.commit()
-        upd.addproduct(cursor, pedido)
+        upd.addproduct(cursor, pedido, connection)
         connection.commit()
     elif choice == '4':
-        query = "SELECT id_reserva FROM reserva WHERE fecha_reserva = CURRENT_DATE"
+        query = "SELECT id_reserva FROM reserva WHERE fecha_reserva = CURRENT_DATE AND id_sede = %s"
         cursor.execute(query, (id_sede,))
         table = cursor.fetchall()
         print(tabulate(table, headers=['ID Pedido']))
@@ -44,7 +44,7 @@ def handle_mesero_choice(choice, id_sede, connection):
             except ValueError:
                 print("ID inválido")
                 return
-        upd.addproduct(cursor,id_pedido)
+        upd.addproduct(cursor,id_pedido,connection)
         connection.commit()
     elif choice == '5':
         print("Saliendo...")
